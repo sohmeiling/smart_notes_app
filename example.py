@@ -107,6 +107,11 @@ button_note_save.clicked.connect(save_note)
 # Execution of the application
 
 window.show()
+with open("notes_data.json", "r") as file:
+    notes = json.load(file)
+list_notes.addItems(notes)
+
 app.exec_()
+
 
 
