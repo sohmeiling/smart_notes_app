@@ -95,13 +95,63 @@ def save_note():
     else:
         print("No selected note")
 
+def del_note():
+    if list_notes.selectedItems():
+        key = list_notes.selectedItems()[0].text()
+        del notes[key]
+        list_notes.clear()
+        list_tags.clear()
+        field_text.clear()
+        list_notes.addItems(notes)
+        with open("notes_data.json", "w") as file:
+            json.dump(notes, file, sort_keys=True, ensure_ascii=False)
+    else:
+        print("No selected note")
 
+def add_tag():
+    if list_notes.selectedItems():
+        key = list_notes.selectedItems()[0].text()
+        notes[key]["tags"].append(field_tag.text())
+        list_tags.clear()
+        list_tags.addItems(notes[key]["tags"])
+        with open("notes_data.json", "w") as file:
+            json.dump(notes, file, sort_keys=True, ensure_ascii=False)
+    else:
+        print("No selected note")
+
+def del_tag():
+    if list_notes.selectedItems():
+        key = list_notes.selectedItems()[0].text()
+        notes[key]["tags"].remove(list_tags.selectedItems()[0].text())
+        list_tags.clear()
+        list_tags.addItems(notes[key]["tags"])
+        with open("notes_data.json", "w") as file:
+            json.dump(notes, file, sort_keys=True, ensure_ascii=False)
+    else:
+        print("No selected note")
+
+def search_tag():
+    tag = field_tag.text()
+    if button_search.text() == "Search notes by tag":
+        button_search.setText("Show all notes")
+        list_notes.clear()
+        for note in notes:
+            if tag in notes[note]["tags"]:
+                list_notes.addItem(note)
+    else:
+        button_search.setText("Search notes by tag")
+        list_notes.clear()
+        list_notes.addItems(notes)
+        
 # ------------------------------------------
 # Event handling
 button_note_create.clicked.connect(add_note)
 list_notes.itemClicked.connect(show_note)
 button_note_save.clicked.connect(save_note)
-
+button_note_del.clicked.connect(del_note)
+button_add.clicked.connect(add_tag)
+button_del.clicked.connect(del_tag)
+button_search.clicked.connect(search_tag)
 
 # ------------------------------------------
 # Execution of the application
