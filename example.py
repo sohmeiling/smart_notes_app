@@ -80,10 +80,27 @@ def add_note():
         list_tags.addItems(notes[note_name]["tags"])
         print(notes) 
 
+def show_note():
+    key = list_notes.selectedItems()[0].text()
+    field_text.setText(notes[key]["text"])
+    list_tags.clear()
+    list_tags.addItems(notes[key]["tags"])
+
+def save_note():
+    if list_notes.selectedItems():
+        key = list_notes.selectedItems()[0].text()
+        notes[key]["text"] = field_text.toPlainText()
+        with open("notes_data.json", "w") as file:
+            json.dump(notes, file, sort_keys=True, ensure_ascii=False)
+    else:
+        print("No selected note")
+
 
 # ------------------------------------------
 # Event handling
 button_note_create.clicked.connect(add_note)
+list_notes.itemClicked.connect(show_note)
+button_note_save.clicked.connect(save_note)
 
 
 # ------------------------------------------
